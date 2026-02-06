@@ -1,0 +1,64 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Arquivos de ambiente
+.env
+.env.*
+!.env.example
+
+# Build / produção
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Cache
+.cache/
+.parcel-cache/
+.npm/
+.eslintcache
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arquivos temporários
+tmp/
+temp/
+
+# Testes
+coverage/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# Docker
+docker-compose.override.yml
+
+# Arquivos locais de configuração
+*.local
+
+# Banco de dados local
+*.sqlite
+*.sqlite3
+
+# Arquivos de upload (caso exista)
+uploads/
