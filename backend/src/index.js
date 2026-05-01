@@ -1,15 +1,11 @@
-import express from 'express';
-const app = express();
+import app from './server.js';
 
 import resumesRoutes from './routes/resumes.js';
 
 app.use('/resumes', resumesRoutes);
 
-app.get('/', (req, res) => {
-  res.json({ mensagem: 'DOCKA backend rodando' });
-});
+const port = process.env.PORT || 3001;
 
-app.listen(5000, () => {
-  console.log('Servidor rodando na porta 5000');
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
 });
-
