@@ -1,11 +1,11 @@
-import React, { useState } from 'react';  // Importa React e useState para gerenciar estados reativos 
-
-const App = () => {  // Define o componente como arrow function (por quê? Mais conciso para funções sem 'this', comum em React moderno)
+import React, { useState } from 'react';  
+import axios from 'axios';  
+const App = () => { 
     const [file, setFile] = useState(null);  
     const [mensagem, setMensagem] = useState('');  
     const [loading, setLoading] = useState(false);
 
-    const handleFileChange = (event) => {  // Arrow function para onChange: atualiza estado com o arquivo selecionado
+    const handleFileChange = (event) => {  
         const selectedFile = event.target.files[0]; 
         if (selectedFile) {
             setFile(selectedFile);
@@ -15,39 +15,48 @@ const App = () => {  // Define o componente como arrow function (por quê? Mais 
         }
     };
 
-    const handleSimulateUpload = () => {  // Arrow function para onClick: simula upload com delay e loading 
+    const handleUpload = async () => {  
         if (!file) {
-          setMensagem('Selecione um arquivo primeiro!'); 
-          return;   
+            setMensagem('Selecione um arquivo primeiro!'); 
+            return;   
         } 
 
-        // Validação de tipo: Checa MIME types permitidos (PDF, PPT, PPTX) antes de prosseguir 
         const allowedTypes = ['application/pdf', 'application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'];
         if (!allowedTypes.includes(file.type)) {
             setMensagem('Tipo de arquivo inválido! Apenas PDF, PPT ou PPTX são permitidos.');  
             return;  
         }
 
-        
         setLoading(true);
         setMensagem('Carregando...');
-        setTimeout(() => {
-            setMensagem(`Simulando upload de ${file.name}... Sucesso!`);  
-            console.log("Arquivo simulado:", file);  
-            setLoading(false);  // Desativa loading após delay (ajuste anterior mantido) 
-        }, 2000);
+
+        const formData = new FormData();  
+        formData.append('file', file);  
+
+        try {
+            const response = await axios.post('http://localhost:3001/upload', formData, {  
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            setMensagem(`${response.data.mensagem} Arquivo: ${response.data.arquivo}`); 
+            console.log('Resposta do backend:', response.data);  // Log no console do navegador
+        } catch (error) {
+            setMensagem(`Erro no upload: ${error.message}`);
+            console.error('Erro no axios:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (  
         <div style={{ textAlign: 'center', marginTop: '50px' }}>  
             <h1>DOCKA - Upload de Slides</h1>
             <input type="file" accept=".pdf,.ppt,.pptx" onChange={handleFileChange} />  
-            <button onClick={handleSimulateUpload} disabled={loading}>  
-                Simular Upload
+            <button onClick={handleUpload} disabled={loading}>  
+                Enviar Upload  
             </button>  
             <p>{mensagem}</p> 
         </div>
     );
 };
 
-export default App;  
+export default App;
