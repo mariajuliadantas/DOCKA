@@ -1,6 +1,7 @@
-import React, { useState } from 'react';  
-import axios from 'axios';  
-const App = () => { 
+import React, { useState } from 'react';  // No topo
+import axios from 'axios';  // No topo (instalado no package.json)
+
+const UploadComponent = () => {  
     const [file, setFile] = useState(null);  
     const [mensagem, setMensagem] = useState('');  
     const [loading, setLoading] = useState(false);
@@ -37,13 +38,12 @@ const App = () => {
             const response = await axios.post('http://localhost:3001/upload', formData, {  
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-            setMensagem(`${response.data.mensagem} Arquivo: ${response.data.arquivo}`); 
-            console.log('Resposta do backend:', response.data);  // Log no console do navegador
-        } catch (error) {
-            setMensagem(`Erro no upload: ${error.message}`);
-            console.error('Erro no axios:', error);
+            setMensagem(`${response.data.mensagem}\nResumo: ${response.data.resumo}`);  
+        } catch (error) {  
+            setMensagem(`Erro no upload: ${error.message}`);  
+            console.error('Erro no axios:', error);  
         } finally {
-            setLoading(false);
+            setLoading(false);  
         }
     };
 
@@ -52,11 +52,11 @@ const App = () => {
             <h1>DOCKA - Upload de Slides</h1>
             <input type="file" accept=".pdf,.ppt,.pptx" onChange={handleFileChange} />  
             <button onClick={handleUpload} disabled={loading}>  
-                Enviar Upload  
+                Enviar Upload
             </button>  
             <p>{mensagem}</p> 
         </div>
     );
 };
 
-export default App;
+export default UploadComponent;
